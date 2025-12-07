@@ -1,6 +1,6 @@
-# Space.io Enhanced
+# Space.io 
 
-Space.io Enhanced is a fast-paced, single-lane-dodging arcade game built with pure HTML, CSS, and JavaScript.  
+Space.io is a fast-paced, single-lane-dodging arcade game built with pure HTML, CSS, and JavaScript.  
 You dodge obstacles, collect coins, and grab power-ups while the difficulty ramps up over time. The game includes juicy visual feedback like screen shake and particle trails, plus a settings panel for fine-tuning audio.
 
 ---
@@ -151,4 +151,5 @@ Use the **🔊 / 🔇** button to quickly mute/unmute all audio (music + SFX).
 ## Project Structure
 
 Basic structure for deployment (e.g., GitHub Pages):
+
 
