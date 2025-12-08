@@ -352,11 +352,13 @@ small{ opacity:0.8; display:block; margin-top:6px; }
   display:block;
 }
 
+/* touchzones stay under overlays due to z-index */
 .touchzone{
   position:absolute;
   left:0; right:0;
   height:50%;
   pointer-events:auto;
+  z-index:1;
 }
 .touch-top{ top:0; }
 .touch-bottom{ bottom:0; }
@@ -640,6 +642,13 @@ function startBgMusic(){
 function pauseBgMusic(){
   if(!bgMusic) return;
   bgMusic.pause();
+}
+
+// enable/disable touch zones
+function setTouchzonesActive(active){
+  const pe = active ? 'auto' : 'none';
+  touchTop.style.pointerEvents = pe;
+  touchBottom.style.pointerEvents = pe;
 }
 
 function createEntityNode(kind,imgSrc){
@@ -952,6 +961,7 @@ function startGame(){
   gameOverOverlay.style.display='none';
   pausedOverlay.style.display='none';
   settingsOverlay.style.display='none';
+  setTouchzonesActive(true);
   playStart();
   startBgMusic();
   requestAnimationFrame(gameLoop);
@@ -961,6 +971,7 @@ function endGame(){
   try{
     state.running=false;
     pauseBgMusic();
+    setTouchzonesActive(false);
     gameOverOverlay.style.display='flex';
     finalScore.textContent=state.score;
     if(state.score>state.best){
@@ -979,18 +990,21 @@ againBtn.addEventListener('click',()=>startGame());
 menuBtn.addEventListener('click',()=>{
   menuOverlay.style.display='flex';
   gameOverOverlay.style.display='none';
+  setTouchzonesActive(false);
 });
 pauseBtn.addEventListener('click',()=>{
   if(!state.running) return;
   state.paused=!state.paused;
   pausedOverlay.style.display=state.paused?'flex':'none';
   pauseBtn.textContent=state.paused?'Resume':'Pause';
+  setTouchzonesActive(!state.paused);
   if(state.paused) pauseBgMusic(); else startBgMusic();
 });
 resumeBtn.addEventListener('click',()=>{
   state.paused=false;
   pausedOverlay.style.display='none';
   pauseBtn.textContent='Pause';
+  setTouchzonesActive(true);
   startBgMusic();
 });
 restartBtn.addEventListener('click',()=>startGame());
@@ -1000,6 +1014,7 @@ pauseSettingsBtn.addEventListener('click',()=>{
   state.settingsOpen=true;
   settingsResumeBtn.style.display='inline-block';
   closeSettingsBtn.textContent='Back';
+  setTouchzonesActive(false);
 });
 settingsBtn.addEventListener('click',()=>{
   if(state.running) {
@@ -1010,6 +1025,7 @@ settingsBtn.addEventListener('click',()=>{
     state.settingsOpen=true;
     settingsResumeBtn.style.display='none';
     closeSettingsBtn.textContent='Close';
+    setTouchzonesActive(false);
   }
 });
 closeSettingsBtn.addEventListener('click',()=>{
@@ -1018,6 +1034,7 @@ closeSettingsBtn.addEventListener('click',()=>{
     pausedOverlay.style.display='flex';
   }
   state.settingsOpen=false;
+  setTouchzonesActive(!state.paused && state.running);
 });
 settingsResumeBtn.addEventListener('click',()=>{
   settingsOverlay.style.display='none';
@@ -1025,11 +1042,12 @@ settingsResumeBtn.addEventListener('click',()=>{
   state.paused=false;
   state.settingsOpen=false;
   pauseBtn.textContent='Pause';
+  setTouchzonesActive(true);
   startBgMusic();
   requestAnimationFrame(gameLoop);
 });
 tutorialBtn.addEventListener('click',()=>{
-  alert("Controls:\n - Arrow Up / W: move up\n - Arrow Down / S: move down\n - On mobile: tap/swipe top & bottom.\nCollect coins and power-ups. Avoid obstacles!\n\n");
+  alert("Controls:\n - Arrow Up / W: move up\n - Arrow Down / S: move down\n - On mobile: tap top/bottom.\nCollect coins and power-ups. Avoid obstacles!\n\n");
 });
 muteBtn.addEventListener('click',()=>{
   state.muted=!state.muted;
@@ -1056,6 +1074,7 @@ window.addEventListener('blur',()=>{
     pausedOverlay.style.display='flex';
     pauseBtn.textContent='Resume';
     pauseBgMusic();
+    setTouchzonesActive(false);
   }
 });
 
@@ -1090,6 +1109,7 @@ setInterval(()=>{
 },5000);
 
 menuOverlay.style.display='flex';
+setTouchzonesActive(false);
 </script>
 </body>
 </html>
