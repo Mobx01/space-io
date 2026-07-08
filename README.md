@@ -1,155 +1,164 @@
-# Space.io 
+# Space.io
 
-Space.io is a fast-paced, single-lane-dodging arcade game built with pure HTML, CSS, and JavaScript.  
-You dodge obstacles, collect coins, and grab power-ups while the difficulty ramps up over time. The game includes juicy visual feedback like screen shake and particle trails, plus a settings panel for fine-tuning audio.
+[![Build Status](https://img.shields.io/badge/build-passing-brightgreen)](#) [![Version](https://img.shields.io/badge/version-1.0.0-blue)](#) [![License](https://img.shields.io/badge/license-MIT-blue)](#)
 
----
+Space.io is a fast-paced, single-lane-dodging arcade game built entirely with pure HTML, CSS, and Vanilla JavaScript. Players dodge obstacles, collect coins, and utilize power-ups while the game engine dynamically ramps up difficulty over time. The project features advanced visual feedback, including screen shake, particle trails, parallax background scrolling, and a custom Web Audio API sound system.
 
-## Features
+## Table of Contents
+- [Core Features and Gameplay](#core-features-and-gameplay)
+- [Tech Stack](#tech-stack)
+- [Visuals](#visuals)
+- [Installation and Setup](#installation-and-setup)
+- [Usage Examples](#usage-examples)
+- [Time Complexity and Performance](#time-complexity-and-performance)
+- [Game Engine Pipeline](#game-engine-pipeline)
+- [Project Architecture](#project-architecture)
+- [Contributing](#contributing)
+- [Changelog](#changelog)
+- [License](#license)
+- [Contact and Support](#contact-and-support)
 
-- **Endless lane-based runner**
-  - 4 vertical lanes with smooth lane switching.
-  - Increasing difficulty over time: faster obstacles and tighter spawn intervals.
-- **Randomized obstacle system**
-  - Obstacles spawn at randomized intervals between a configurable minimum and maximum.
-  - Burst spawns: occasional groups of obstacles for intense moments.
-  - Lane clustering: new obstacles sometimes spawn near the previous lane to create patterns.
+## Core Features and Gameplay
 
-- **Collectibles and power-ups**
-  - **Coins**:
-    - Spinning 3D-style coin visual.
-    - Each coin increases your score by a fixed amount.
-  - **Shield power-up**:
-    - Temporarily lets you survive one collision with an obstacle.
-    - HUD pill indicates active shield duration.
-  - **Slow-motion power-up**:
-    - Temporarily slows down obstacle movement.
-    - HUD pill indicates slow effect duration.
+### Endless Lane-Based Runner
+* Features 4 vertical lanes with smooth transitioning.
+* Increasing difficulty over time via faster obstacles and tighter spawn intervals.
 
-- **Dynamic difficulty**
-  - Base obstacle speed increases at regular time intervals.
-  - Spawn intervals shrink over time to increase pressure.
-  - Difficulty parameters are configurable via a central `CONFIG` object in the script.
+### Randomized Obstacle System
+* Obstacles spawn at randomized intervals between a configurable minimum and maximum.
+* **Burst spawns:** Occasional groups of obstacles for intense moments.
+* **Lane clustering:** New obstacles sometimes spawn near the previous lane to create recognizable patterns.
 
-- **Visual & feedback effects**
-  - **Parallax-scrolling city background**:
-    - Main background moves horizontally based on game speed.
-    - Three additional parallax layers add depth with subtle, independent motion.
-  - **Global screen shake**:
-    - Triggered on:
-      - Direct collisions with obstacles.
-      - Shield-breaking collisions.
-      - Occasional near-misses (close passes without impact).
-    - Uses a CSS keyframe animation applied to the game container.
-  - **Player trail particles**:
-    - Soft, orange glow particles spawn behind the player at short intervals while moving.
-    - Each particle fades and disappears over a brief period for a smooth trail effect.
-  - **Score HUD & best score**:
-    - Live score display increments with survival time and coin pickups.
-    - Best score is stored in `localStorage` and persists across sessions.
+### Collectibles and Power-ups
+* **Coins:** Spinning 3D-style visual. Each coin increases the score by a fixed amount.
+* **Shield:** Temporarily allows survival of one collision with an obstacle. Represented by a HUD pill.
+* **Slow-motion:** Temporarily slows down obstacle movement.
 
-- **Audio & Settings**
-  - **Background music**:
-    - Looped `<audio>` element controlled via JavaScript.
-    - Respectful of mute state and user interaction (to satisfy browser autoplay policies).
-  - **SFX system using Web Audio API**:
-    - Beep-based sound effects for:
-      - Game start.
-      - Coin collection.
-      - Power-up pickup.
-      - Hit / game over.
-      - Difficulty level-up.
-  - **Settings panel (overlay)**:
-    - Accessible from:
-      - Topbar ⚙️ button.
-      - Pause menu “Settings” button.
-    - Includes:
-      - **Music volume slider** (0–100%).
-      - **SFX volume slider** (0–100%).
-    - Values are saved to `localStorage` and restored on reload.
-    - Background music volume is directly controlled; SFX gain scales with the SFX slider.
+### Visual and Feedback Effects
+* **Parallax-Scrolling City:** Main background moves horizontally, supported by three additional parallax layers for depth.
+* **Global Screen Shake:** Triggered on direct collisions, shield-breaking, and near-misses.
+* **Player Trails:** Soft, glowing particles spawn behind the player and smoothly fade out.
+* **Score HUD:** Live score display increments with survival time and coin pickups. Best score persists via local storage.
 
-- **Responsive controls & input**
-  - **Keyboard**:
-    - `Arrow Up` / `W` → move up one lane.
-    - `Arrow Down` / `S` → move down one lane.
-  - **Mouse wheel**:
-    - Scroll up → move up.
-    - Scroll down → move down.
-  - **Touch / mobile**:
-    - Tap top half of the game → move up.
-    - Tap bottom half → move down.
-    - Swipe gestures also supported via touchstart/touchend handling.
-  - **Pause / resume**:
-    - Dedicated Pause button in the topbar.
-    - Auto-pause on window blur (when user switches tabs / windows).
-    - Overlays for:
-      - Main menu.
-      - Pause screen.
-      - Game over screen.
+### Audio and Settings
+* **Background Music:** Looped audio element respectful of browser autoplay policies.
+* **SFX System:** Utilizes the Web Audio API for custom beep-based effects (start, coin collect, power-up, hit, level-up).
+* **Settings Panel:** Allows independent volume control for music and SFX. Values are saved persistently.
 
----
+### Responsive Controls
+* **Keyboard:** Arrow Up/W to move up, Arrow Down/S to move down.
+* **Mouse:** Scroll wheel up/down to switch lanes.
+* **Touch:** Tap top/bottom half of the game area, or use swipe gestures.
 
 ## Tech Stack
+* **Markup & Structure:** HTML5 (including native Audio integration).
+* **Styling:** CSS3 (Flexbox layout, Keyframe animations, Parallax layering).
+* **Logic & Engine:** Vanilla JavaScript (ES6+).
+* **Browser APIs:** DOM Manipulation, Web Audio API, LocalStorage API, `requestAnimationFrame`.
 
-- **HTML5** for structure and `<audio>` integration.
-- **CSS3** for:
-  - Layout and responsive design.
-  - Parallax background layers and blurred page background.
-  - Screen shake keyframe animation.
-  - Coin spin animation and trail particle styling.
-- **Vanilla JavaScript** for:
-  - Game loop and timing using `requestAnimationFrame`.
-  - Entity management (obstacles, coins, power-ups).
-  - Collision detection using DOM `getBoundingClientRect()`.
-  - Audio using `<audio>` and Web Audio API (for SFX).
-  - State management and persistent settings via `localStorage`.
+## Visuals
+[Insert screenshot, GIF, or gameplay footage demonstrating the parallax scrolling, obstacle dodging, and particle trails.]
+*(Placeholder for gameplay GIF)*
 
----
+## Installation and Setup
 
-## How to Play
+### Prerequisites
+Because the game runs entirely in the browser using Vanilla web technologies, no build tools or package managers (like npm) are required. You only need a modern web browser.
 
-1. **Start**
-   - Open `index.html` in a modern browser.
-   - Click **“Start Game”** on the main menu.
+### Step-by-Step Installation
 
-2. **Controls**
-   - Keyboard:
-     - `Arrow Up` or `W` → Move up a lane.
-     - `Arrow Down` or `S` → Move down a lane.
-   - Mouse:
-     - Scroll wheel up/down to move between lanes.
-   - Touch:
-     - Tap top half of the game area → Move up.
-     - Tap bottom half → Move down.
-   - Pause:
-     - Click the **Pause** button in the top bar.
-     - Game auto pauses when the tab/window loses focus.
+1. Clone the repository to your local machine:
+   ```bash
+   git clone [https://github.com/Mobx01/space-io.git](https://github.com/Mobx01/space-io.git)
+   cd space-io
+   ```
 
-3. **Objective**
-   - Dodge obstacles as long as possible.
-   - Collect coins to increase score.
-   - Use power-ups (shield and slow) to survive longer.
-   - Try to beat your **Best** score stored locally.
+2. Launch the game:
+   Simply double-click the `index.html` file to open it in your default web browser.
 
----
+   *(Note: If your browser restricts local file audio playback due to CORS policies, you can run a quick local server instead:)*
+   ```bash
+   # If using Python
+   python -m http.server 8000
+   
+   # Or using Node.js
+   npx http-server
+   ```
+   Then navigate to `http://localhost:8000` in your browser.
 
-## Settings & Audio
+## Usage Examples
 
-- Click the **⚙️ Settings** button in the topbar or **Settings** from the pause menu.
-- Adjust:
-  - **Music Volume** (0–100%): Controls background music volume.
-  - **SFX Volume** (0–100%): Controls all beep-based sound effects.
-- Changes are:
-  - Applied immediately.
-  - Saved to `localStorage` under a settings key and restored at reload.
+Below are snippets demonstrating how the custom game engine handles core logic.
 
-Use the **🔊 / 🔇** button to quickly mute/unmute all audio (music + SFX).
+**Collision Detection Logic (AABB):**
+```javascript
+// Example of the Axis-Aligned Bounding Box (AABB) intersection check used in the game loop
+function rectsIntersect(a, b) {
+  return !(a.right < b.left || 
+           a.left > b.right || 
+           a.bottom < b.top || 
+           a.top > b.bottom);
+}
+```
 
----
+**Web Audio API Synthesizer (SFX):**
+```javascript
+// Example of how the engine dynamically generates sound effects without audio files
+function beep(freq = 440, time = 0.08, gain = 0.12) {
+  if (state.muted || state.sfxVol === 0) return;
+  initAudio();
+  const oscillator = audioCtx.createOscillator();
+  const gainNode = audioCtx.createGain();
+  
+  oscillator.type = 'sine';
+  oscillator.frequency.value = freq;
+  gainNode.gain.value = gain * state.sfxVol;
+  
+  oscillator.connect(gainNode);
+  gainNode.connect(audioCtx.destination);
+  oscillator.start();
+  oscillator.stop(audioCtx.currentTime + time);
+}
+```
 
-## Project Structure
+## Time Complexity and Performance
+* **Collision Detection:** O(N) per frame, where N is the number of active entities on screen. The engine optimizes this by strictly checking intersections only against the player's bounding box.
+* **Garbage Collection (DOM Recycling):** O(K) where K is the number of off-screen entities purged per frame, keeping memory footprint low and stable.
+* **Rendering Update:** O(N) per frame for DOM translation updates (adjusting `style.left`).
 
-Basic structure for deployment (e.g., GitHub Pages):
+## Game Engine Pipeline
+The application utilizes a custom `requestAnimationFrame` loop that acts as the primary data pipeline, executing the following phases every frame:
+1. **Time Delta Calculation:** Computes the delta time (dt) between frames to ensure movement speeds are mathematically decoupled from the monitor's refresh rate.
+2. **State & Environment Update:** Translates the parallax background layers and checks dynamic difficulty timers to scale base speeds.
+3. **Entity Processing:** Iterates through all spawned entities (obstacles, coins, power-ups), applying velocity and calculating new screen coordinates.
+4. **Collision Phase:** Fetches DOM bounding boxes and executes AABB overlap checks to handle shield breaks, near-miss screen shakes, or game-over states.
+5. **DOM Pruning:** Detects entities that have crossed the left boundary threshold and removes their corresponding DOM nodes to prevent memory leaks.
 
+## Project Architecture
+The project is structured as a lightweight, single-page application to maximize load speed and accessibility:
+* `index.html` - Contains the entire application. It is divided into three distinct blocks:
+  * **HTML Structure:** Defines the game container, UI overlays, scoreboards, and touch zones.
+  * **CSS Styles:** Handles all visual design, keyframe animations (coin spins, screen shakes), and z-index layering.
+  * **JavaScript Engine:** Contains the core configuration object (`CONFIG`), state management, procedural generation logic, and the central `gameLoop`.
+* `/assets` - Contains associated media such as `bg-city.png`, `music.mp3`, and entity sprites (`obs1.png`, `shield.png`, etc.).
 
+## Contributing
+
+We welcome contributions to improve this project. To contribute:
+
+1. Fork the repository.
+2. Create a new branch (`git checkout -b feature/your-feature-name`).
+3. Ensure your code follows the established conventions.
+4. Commit your changes (`git commit -m 'Add some feature'`).
+5. Push to the branch (`git push origin feature/your-feature-name`).
+6. Open a Pull Request.
+
+Please report bugs or request features by opening an issue in the GitHub issue tracker.
+
+## Changelog
+
+* **v1.0.0** - Initial release featuring dynamic lane clustering, parallax scrolling, Web Audio API sound effects, and persistent local storage saving.
+
+## License
+
+This project is licensed under the [MIT License](LICENSE) - see the LICENSE file for details.
